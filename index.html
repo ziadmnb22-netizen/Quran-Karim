@@ -109,9 +109,10 @@
 </head>
 <body>
 
-    <header>📖 تطبيق القرآن الكريم المطور</header>
+    <header>📖 تطبيق القرآن الكريم</header>
 
     <div class="container">
+        <!-- أزرار التنقل -->
         <div class="tabs">
             <div id="tab-read" class="tab active" onclick="switchTab('read-section')">القراءة والتفسير</div>
             <div id="tab-listen" class="tab" onclick="switchTab('listen-section')">الاستماع للمشايخ</div>
@@ -119,7 +120,7 @@
 
         <!-- قسم القراءة والتفسير -->
         <div id="read-section" class="content-section active">
-            <h3>اختر السورة للتدبر:</h3>
+            <h3>اختر السورة:</h3>
             <select id="surahSelect" onchange="loadSurahData()">
                 <!-- سيتم تحميل السور تلقائياً -->
             </select>
@@ -132,11 +133,14 @@
         <div id="listen-section" class="content-section">
             <h3>اختر القارئ:</h3>
             <select id="reciterSelect">
-                <option value="https://download.quranicaudio.com/quran/abdul_basit_samad/mujawwad/">الشيخ عبد الباسط عبد الصمد (تجويد)</option>
-                <option value="https://server15.mp3quran.net/aldosery/">الشيخ ياسر الدوسري (ترتيل)</option>
-                <option value="https://download.quranicaudio.com/quran/muhammad_siddiq_al-minshawi/mujawwad/">الشيخ محمد صديق المنشاوي (تجويد)</option>
-                <option value="https://download.quranicaudio.com/quran/mishari_rashid_al_afasi/">الشيخ مشاري العفاسي (ترتيل)</option>
-                <option value="https://download.quranicaudio.com/quran/maher_al_muaiqly/year1440/">الشيخ ماهر المعيقلي (ترتيل)</option>
+                <option value="https://server10.mp3quran.net/basit_mjwd/">1. الشيخ عبد الباسط عبد الصمد (تجويد)</option>
+                <option value="https://server8.mp3quran.net/mustafa/">2. الشيخ مصطفى إسماعيل (تجويد)</option>
+                <option value="https://server12.mp3quran.net/tblwy/">3. الشيخ محمد محمود الطبلاوي (تجويد)</option>
+                <option value="https://server15.mp3quran.net/aldosery/">4. الشيخ ياسر الدوسري (ترتيل)</option>
+                <option value="https://server8.mp3quran.net/frs_a/">5. الشيخ فارس عباد (ترتيل)</option>
+                <option value="https://server11.mp3quran.net/minsh_mjwd/">6. الشيخ محمد صديق المنشاوي (تجويد)</option>
+                <option value="https://server12.mp3quran.net/maher/">7. الشيخ ماهر المعيقلي (ترتيل)</option>
+                <option value="https://server10.mp3quran.net/ajm/">8. الشيخ أحمد بن علي العجمي (ترتيل)</option>
             </select>
 
             <h3>اختر السورة للاستماع:</h3>
@@ -226,9 +230,10 @@
             player.src = audioUrl;
             player.load(); 
             player.play().catch(error => {
-                alert("يرجى الضغط على زر التشغيل مرة أخرى.");
+                alert("يرجى المحاولة مرة أخرى أو اختيار سورة أخرى للتأكد.");
             });
         }
     </script>
 </body>
-</html>
+    </html>
+    
