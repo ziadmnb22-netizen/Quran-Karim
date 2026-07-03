@@ -135,8 +135,8 @@
             <select id="reciterSelect">
                 <option value="https://server7.mp3quran.net/basit/">1. الشيخ عبد الباسط عبد الصمد (ترتيل)</option>
                 <option value="https://server8.mp3quran.net/mustafa/">2. الشيخ مصطفى إسماعيل (تجويد)</option>
-                <option value="https://server10.mp3quran.net/tblwy/">3. الشيخ محمد محمود الطبلاوي (تجويد - سيرفر سريع)</option>
-                <option value="https://server10.mp3quran.net/aldosery/">4. الشيخ ياسر الدوسري (ترتيل - سيرفر سريع)</option>
+                <option value="https://archive.org/download/Al-Tablawi_Mojawwad/">3. الشيخ محمد محمود الطبلاوي (تجويد - سيرفر نهائي)</option>
+                <option value="https://archive.org/download/yasser_aldosari_1442_202105/">4. الشيخ ياسر الدوسري (ترتيل - سيرفر نهائي)</option>
                 <option value="https://server8.mp3quran.net/frs_a/">5. الشيخ فارس عباد (ترتيل)</option>
                 <option value="https://server10.mp3quran.net/minsh/">6. الشيخ محمد صديق المنشاوي (ترتيل)</option>
                 <option value="https://server12.mp3quran.net/maher/">7. الشيخ ماهر المعيقلي (ترتيل)</option>
@@ -225,7 +225,14 @@
                 surahId = "0" + surahId;
             }
 
-            const audioUrl = `${server}${surahId}.mp3`;
+            // تعديل الرابط ليتوافق مع السيرفرات المختلفة
+            let audioUrl = "";
+            if (server.includes("archive.org")) {
+                audioUrl = `${server}${surahId}.mp3`;
+            } else {
+                audioUrl = `${server}${surahId}.mp3`;
+            }
+
             const player = document.getElementById('audioPlayer');
             player.src = audioUrl;
             player.load(); 
@@ -235,4 +242,5 @@
         }
     </script>
 </body>
-</html>
+            </html>
+                    
