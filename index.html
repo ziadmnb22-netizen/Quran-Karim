@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق القرآن الكريم الذكي - أوفلاين</title>
+    <title>تطبيق القرآن الكريم الذكي - VIP TEAM</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -105,11 +105,11 @@
             width: 100%;
             margin-top: 15px;
         }
-        .status-badge {
-            background-color: #0dcaf0;
-            color: #000;
+        .badge {
+            background-color: #198754;
+            color: white;
             padding: 4px 10px;
-            border-radius: 20px;
+            border-radius: 5px;
             font-size: 13px;
             font-weight: bold;
             display: inline-block;
@@ -119,29 +119,29 @@
 </head>
 <body>
 
-    <header>📖 تطبيق القرآن الكريم المستقل</header>
+    <header>📖 تطبيق القرآن الكريم الاحترافي</header>
 
     <div class="container">
         <div class="tabs">
-            <div id="tab-read" class="tab active" onclick="switchTab('read-section')">المصحف والتفسير</div>
-            <div id="tab-listen" class="tab" onclick="switchTab('listen-section')">الاستماع الذكي</div>
+            <div id="tab-read" class="tab active" onclick="switchTab('read-section')">القراءة والتفسير</div>
+            <div id="tab-listen" class="tab" onclick="switchTab('listen-section')">الاستماع للمشايخ</div>
         </div>
 
         <!-- قسم القراءة والتفسير -->
         <div id="read-section" class="content-section active">
-            <div class="status-badge">وضع الأوفلاين نشط 🌐 ✅</div>
-            <h3>اختر السورة للقراءة والتفسير فوراً:</h3>
-            <select id="surahSelect" onchange="loadSurahOfflineData()">
-                <!-- سيتم تحميل الـ 114 سورة تلقائياً -->
+            <div class="badge" id="readStatus">وضع التخزين التلقائي نشط ✅</div>
+            <h3>اختر السورة:</h3>
+            <select id="surahSelect" onchange="loadSurahData()">
+                <!-- تحميل السور تلقائياً -->
             </select>
             <div id="quranView">
-                <p style="text-align: center; color: #777;">اختر سورة للبدء في القراءة والتدبر بدون إنترنت...</p>
+                <p style="text-align: center; color: #777;">اختر سورة للبدء في القراءة والتدبر...</p>
             </div>
         </div>
 
-        <!-- قسم الاستماع الذكي والتخزين -->
+        <!-- قسم الاستماع (بدون طبلاوي ودوسري) -->
         <div id="listen-section" class="content-section">
-            <div class="status-badge" id="cacheStatus">تخزين السور المسموعة تلقائياً 💾</div>
+            <div class="badge" id="audioStatus">حفظ الصوت تلقائياً في الهاتف 💾</div>
             <h3>اختر القارئ:</h3>
             <select id="reciterSelect">
                 <option value="https://server7.mp3quran.net/basit/">1. الشيخ عبد الباسط عبد الصمد (ترتيل)</option>
@@ -154,10 +154,10 @@
 
             <h3>اختر السورة للاستماع:</h3>
             <select id="audioSurahSelect">
-                <!-- سيتم تحميل السور تلقائياً -->
+                <!-- تحميل السور تلقائياً -->
             </select>
 
-            <button onclick="playAudioSmart()">⚡ تشغيل / استماع من الذاكرة</button>
+            <button onclick="playAudioSmart()">⚡ تشغيل وحفظ في ذاكرة الهاتف</button>
             <audio id="audioPlayer" controls></audio>
         </div>
     </div>
@@ -197,89 +197,81 @@
             if(tabId === 'listen-section') document.getElementById('tab-listen').classList.add('active');
         }
 
-        // دالة جلب النص والتفسير أوفلاين مع تخزينه محلياً ليعمل داخل الـ APK بدون نت نهائياً بعد أول فتح
-        async function loadSurahOfflineData() {
+        // دالة جلب البيانات النصية والتفسير وحفظها أوفلاين في الـ APK فوراً وبشكل دائم
+        async function loadSurahData() {
             const surahId = surahSelect.value;
             const quranView = document.getElementById('quranView');
-            const localKey = `surah_${surahId}`;
+            const cacheKey = `text_surah_${surahId}`;
+            const readStatus = document.getElementById('readStatus');
 
-            // التحقق إذا كانت السورة محفوظة مسبقاً في ذاكرة الـ APK الداخلية
-            if (localStorage.getItem(localKey)) {
-                renderSurahHtml(JSON.parse(localStorage.getItem(localKey)));
+            if (localStorage.getItem(cacheKey)) {
+                readStatus.innerText = "عرض أوفلاين من ذاكرة الهاتف 🌐";
+                renderHtml(JSON.parse(localStorage.getItem(cacheKey)));
                 return;
             }
 
-            quranView.innerHTML = "<p style='text-align:center;'>جاري إعداد السورة لمرة واحدة والتثبيت في الذاكرة...</p>";
+            quranView.innerHTML = "<p style='text-align:center;'>جاري عرض السورة وحفظها أوفلاين للأبد...</p>";
 
             try {
                 const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahId}/editions/quran-uthmani,ar.muyassar`);
                 const data = await response.json();
-                
-                // حفظ البيانات في الذاكرة المحلية للأبد للاستخدام بدون نت
-                localStorage.setItem(localKey, JSON.stringify(data.data));
-                renderSurahHtml(data.data);
+                localStorage.setItem(cacheKey, JSON.stringify(data.data));
+                readStatus.innerText = "تم الحفظ بنجاح للاستخدام بدون نت!";
+                renderHtml(data.data);
             } catch (error) {
-                quranView.innerHTML = "<p style='text-align:center; color:red;'>يرجى تشغيل الإنترنت لمرة واحدة فقط لتحميل هذه السورة داخل التطبيق، بعد ذلك ستعمل أوفلاين دائماً.</p>";
+                quranView.innerHTML = "<p style='text-align:center; color:red;'>هذه السورة لم تُحفظ بعد، يرجى تشغيل النت لثانية واحدة لحفظها أوفلاين.</p>";
             }
         }
 
-        function renderSurahHtml(data) {
+        function renderHtml(data) {
             const quranView = document.getElementById('quranView');
             const arabicVerses = data[0].ayahs;
             const tafsirVerses = data[1].ayahs;
-
             let htmlContent = "";
             for (let i = 0; i < arabicVerses.length; i++) {
                 htmlContent += `
                     <div class="verse-container">
-                        <div class="arabic-text">${arabicVerses[i].text} ﴿${arabicVerses[i].numberInSurah}﴾</div>
-                        <div class="tafsir-text">💡 <b>التفسير الميسر:</b> ${tafsirVerses[i].text}</div>
-                    </div>
-                `;
+                        <div class="arabic-text">${arabicVerses[i].text} ﴿${arabicVerses[i].numberInSurah}</div>
+                        <div class="tafsir-text">💡 <b>التفسير:</b> ${tafsirVerses[i].text}</div>
+                    </div>`;
             }
             quranView.innerHTML = htmlContent;
         }
 
-        // تشغيل الصوت بنظام كاش التخزين الذكي للـ APK
+        // دالة تشغيل الصوت بنظام الـ Smart Cache الاحترافي للتطبيقات
         async function playAudioSmart() {
             const server = document.getElementById('reciterSelect').value;
             let surahId = document.getElementById('audioSurahSelect').value;
+            const audioStatus = document.getElementById('audioStatus');
+            const player = document.getElementById('audioPlayer');
             
-            if (surahId < 10) {
-                surahId = "00" + surahId;
-            } else if (surahId < 100) {
-                surahId = "0" + surahId;
-            }
+            if (surahId < 10) surahId = "00" + surahId;
+            else if (surahId < 100) surahId = "0" + surahId;
 
             const audioUrl = `${server}${surahId}.mp3`;
-            const player = document.getElementById('audioPlayer');
-            const cacheStatus = document.getElementById('cacheStatus');
 
-            // إذا كان المتصفح/الـ APK يدعم الـ Service Cache (الحفظ السحابي الذكي داخل التطبيق)
             if ('caches' in window) {
-                const cache = await caches.open('quran-audio-cache');
-                const cachedResponse = await cache.match(audioUrl);
+                const quranCache = await caches.open('vip-team-audio');
+                const hasMatch = await quranCache.match(audioUrl);
 
-                if (cachedResponse) {
-                    cacheStatus.innerText = "وضع الأوفلاين: تشغيل السورة من ذاكرة الهاتف الذكية 💾";
-                    const blob = await cachedResponse.blob();
-                    player.src = URL.createObjectURL(blob);
+                if (hasMatch) {
+                    audioStatus.innerText = "وضع الأوفلاين: السورة تعمل من ذاكرة الهاتف 💾";
+                    const audioBlob = await hasMatch.blob();
+                    player.src = URL.createObjectURL(audioBlob);
                 } else {
-                    cacheStatus.innerText = "جاري التشغيل وتحميل السورة في ذاكرة الهاتف لتشتغل بدون نت لاحقاً... ⏳";
+                    audioStatus.innerText = "جاري تحميل السورة وتخزينها أوفلاين للمرات القادمة... ⏳";
                     player.src = audioUrl;
-                    // حفظها في الخلفية للمرة القادمة
-                    cache.add(audioUrl).catch(err => console.log("حجم السورة كبير على الكاش السريع"));
+                    quranCache.add(audioUrl).catch(e => console.log("تحميل كاش الخلفية نشط"));
                 }
             } else {
                 player.src = audioUrl;
             }
 
-            player.load(); 
+            player.load();
             player.play().catch(error => {
-                alert("السورة غير مخزنة بعد. يرجى الاتصال بالإنترنت لمرة واحدة لتشغيلها وحفظها تلقائياً.");
+                alert("يرجى تشغيل الإنترنت لمرة واحدة لتشغيل وتخزين هذه السورة في الـ APK.");
             });
         }
     </script>
 </body>
-    </html>
-    
+</html>
